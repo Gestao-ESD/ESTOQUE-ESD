@@ -189,17 +189,44 @@ formItem.addEventListener("submit", async (e) => {
   }
 });
 
-async function excluirItem(id) {
-  const item = itensCache.find(i => i.id === id);
-  if (!item) return;
-  if (!confirm(`Excluir "${item.nome}" do estoque? Essa ação não pode ser desfeita.`)) return;
+// ---- Modal de confirmação estilizado (substitui o confirm() nativo do navegador) ----
+let acaoConfirmada = null;
+function abrirConfirmacao(titulo, mensagem, aoConfirmar) {
+  document.getElementById("confirmarTitulo").textContent = titulo;
+  document.getElementById("confirmarMensagem").textContent = mensagem;
+  acaoConfirmada = aoConfirmar;
+  abrirModal("modalConfirmar");
+}
+document.getElementById("btnConfirmarAcao").addEventListener("click", async () => {
+  const btn = document.getElementById("btnConfirmarAcao");
+  const acao = acaoConfirmada;
+  if (!acao) return;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader"></span> Excluindo...';
   try {
-    await deleteDoc(doc(db, "setores", SETOR_ID, "itens", id));
-    toast("Item excluído.");
+    await acao();
+    fecharModal("modalConfirmar");
   } catch (err) {
     console.error(err);
     toast("Erro ao excluir item.", true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Sim, excluir";
+    acaoConfirmada = null;
   }
+});
+
+async function excluirItem(id) {
+  const item = itensCache.find(i => i.id === id);
+  if (!item) return;
+  abrirConfirmacao(
+    "Excluir item?",
+    `Tem certeza que deseja excluir "${item.nome}" do estoque? Essa ação não pode ser desfeita.`,
+    async () => {
+      await deleteDoc(doc(db, "setores", SETOR_ID, "itens", id));
+      toast("Item excluído.");
+    }
+  );
 }
 
 // ---- Entrada ----
