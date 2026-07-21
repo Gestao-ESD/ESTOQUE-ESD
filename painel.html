@@ -765,6 +765,22 @@
   </div>
 </div>
 
+<!-- ============ MODAL: CONFIRMAÇÃO (exclusão) ============ -->
+<div class="modal-overlay" id="modalConfirmar">
+  <div class="modal" style="max-width:380px;">
+    <button class="modal-close" data-close>&times;</button>
+    <div style="width:44px;height:44px;border-radius:50%;background:var(--danger-bg);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+    </div>
+    <h3 id="confirmarTitulo">Excluir item?</h3>
+    <p class="modal-sub" id="confirmarMensagem">Essa ação não pode ser desfeita.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" data-close>Cancelar</button>
+      <button type="button" class="btn" id="btnConfirmarAcao" style="background:var(--danger);color:#fff;">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module" src="app.js"></script>
